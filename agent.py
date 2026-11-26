@@ -2,7 +2,7 @@ import os, sys, json, time, uuid
 from datetime import datetime, timezone
 from dotenv import load_dotenv
 from openai import OpenAI
-from tools import TOOL_DEFS, run_tool
+from tools import TOOL_DEFS, run_tool, schema_context
 
 load_dotenv()
 client = OpenAI()
@@ -27,9 +27,39 @@ SYSTEM_V2 = SYSTEM_V1 + (
     "If the question is too vague to answer with one query, say what is "
     "unclear and ask the user to clarify instead of guessing.")
 
-PROMPTS = {"v1": SYSTEM_V1, "v2": SYSTEM_V2}
+DATA_NOTES = ("Notes: los_days is length of stay in days; admit_date is text "
+              "in YYYY-MM-DD format; died is 1 if the patient died during "
+              "that admission, otherwise 0.")
+
+SYSTEM_V3_BASE = (
+    "You answer questions about a hospital database using the run_sql tool. "
+    "Use only the tables and columns listed in the schema below, and write "
+    "text values exactly as listed. "
+    "Each row in patients is one patient; each row in admissions is one "
+    "hospital admission, and one patient can have several admissions, so "
+    "never report an admission count as a patient count. "
+    "Compute rates and averages inside SQL instead of by hand. "
+    "Only state numbers returned by a tool. If the data cannot answer the "
+    "question, say so instead of guessing. If the question is too vague to "
+    "answer with one query, say what is unclear and ask the user to clarify "
+    "instead of guessing.")
+
+def get_system(version):
+    if version == "v1":
+        return SYSTEM_V1
+    if version == "v2":
+        return SYSTEM_V2
+    if version == "v3":
+        return (SYSTEM_V3_BASE + "\n\nDatabase schema:\n"
+                + schema_context() + "\n" + DATA_NOTES)
+    raise ValueError(f"Unknown PROMPT_VERSION: {version}")
+
 PROMPT_VERSION = os.getenv("PROMPT_VERSION", "v1")
-SYSTEM = PROMPTS[PROMPT_VERSION]
+SYSTEM = get_system(PROMPT_VERSION)
+
+# v3 已经把结构写进提示,不再提供 describe_tables
+TOOLS = TOOL_DEFS if PROMPT_VERSION != "v3" else [
+    t for t in TOOL_DEFS if t["function"]["name"] != "describe_tables"]
 
 def write_log(record):
     os.makedirs("logs", exist_ok=True)

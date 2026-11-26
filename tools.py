@@ -8,6 +8,30 @@ def describe_tables() -> str:
         "SELECT name, sql FROM sqlite_master WHERE type='table'").fetchall()
     return json.dumps(rows)
 
+
+def schema_context(max_distinct: int = 10) -> str:
+    """Build a text description of the schema, with actual values for
+    short text columns, so the model does not have to guess them."""
+    con = sqlite3.connect(DB, uri=True)
+    tables = [r[0] for r in con.execute(
+        "SELECT name FROM sqlite_master WHERE type='table'")]
+    lines = []
+    for t in tables:
+        lines.append(f"Table {t}:")
+        for row in con.execute(f"PRAGMA table_info({t})"):
+            col, ctype = row[1], row[2]
+            line = f"  - {col} ({ctype})"
+            if ctype.upper() == "TEXT":
+                vals = [r[0] for r in con.execute(
+                    f"SELECT DISTINCT {col} FROM {t} ORDER BY 1")]
+                if len(vals) <= max_distinct:
+                    line += " values: " + ", ".join(repr(v) for v in vals)
+                else:
+                    line += f" example: {vals[0]!r}"
+            lines.append(line)
+    return "\n".join(lines)
+
+
 def run_sql(query: str) -> str:
     q = query.strip().rstrip(";")
     if not q.lower().startswith("select") or ";" in q:
