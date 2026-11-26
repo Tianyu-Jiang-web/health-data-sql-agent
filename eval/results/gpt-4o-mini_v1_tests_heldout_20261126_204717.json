@@ -1,0 +1,131 @@
+{
+  "meta": {
+    "model": "gpt-4o-mini",
+    "prompt_version": "v1",
+    "tests_file": "eval/tests_heldout.json"
+  },
+  "results": [
+    {
+      "id": 21,
+      "category": "value",
+      "question": "What is the average length of stay for female patients?",
+      "answer": "The average length of stay for female patients cannot be determined from the available data.",
+      "gold": [
+        3.54606365159129
+      ],
+      "passed": false,
+      "failure": "wrong_answer",
+      "status": "answered",
+      "n_steps": 3,
+      "tool_errors": 0,
+      "latency_s": 2.64,
+      "cost_usd": 0.000138
+    },
+    {
+      "id": 22,
+      "category": "value",
+      "question": "How many different patients have been admitted to the ICU?",
+      "answer": "200 different patients have been admitted to the ICU.",
+      "gold": [
+        200
+      ],
+      "passed": true,
+      "failure": null,
+      "status": "answered",
+      "n_steps": 3,
+      "tool_errors": 0,
+      "latency_s": 2.25,
+      "cost_usd": 0.000122
+    },
+    {
+      "id": 23,
+      "category": "value",
+      "question": "What percentage of admissions happened in 2023?",
+      "answer": "The percentage of admissions that happened in 2023 is approximately 52.42%.",
+      "gold": [
+        52.416666666666664
+      ],
+      "passed": true,
+      "failure": null,
+      "status": "answered",
+      "n_steps": 3,
+      "tool_errors": 0,
+      "latency_s": 3.48,
+      "cost_usd": 0.000163
+    },
+    {
+      "id": 24,
+      "category": "value",
+      "question": "Which diagnosis group has the most deaths?",
+      "answer": "The diagnosis group with the most deaths is \"Respiratory\" with 16 deaths.",
+      "gold": [
+        "Respiratory"
+      ],
+      "passed": true,
+      "failure": null,
+      "status": "answered",
+      "n_steps": 3,
+      "tool_errors": 0,
+      "latency_s": 2.46,
+      "cost_usd": 0.000136
+    },
+    {
+      "id": 25,
+      "category": "value",
+      "question": "What is the average length of stay for patients born after 1990?",
+      "answer": "The average length of stay for patients born after 1990 is approximately 3.67 days.",
+      "gold": [
+        3.672064777327935
+      ],
+      "passed": true,
+      "failure": null,
+      "status": "answered",
+      "n_steps": 3,
+      "tool_errors": 0,
+      "latency_s": 2.72,
+      "cost_usd": 0.000142
+    },
+    {
+      "id": 26,
+      "category": "clarify",
+      "question": "Is the hospital doing better than before?",
+      "answer": "I cannot answer that question without specific performance metrics or data comparisons over time. Please provide more detailed information or specify the metrics you're interested in.",
+      "gold": null,
+      "passed": true,
+      "failure": null,
+      "status": "answered",
+      "n_steps": 1,
+      "tool_errors": 0,
+      "latency_s": 1.07,
+      "cost_usd": 3.6e-05
+    },
+    {
+      "id": 27,
+      "category": "no_data",
+      "question": "How many beds does each ward have?",
+      "answer": "The number of beds in each ward is as follows:\n- Cardiology: 325 beds\n- General: 330 beds\n- ICU: 265 beds\n- Respiratory: 280 beds",
+      "gold": null,
+      "passed": false,
+      "failure": "possible_fabrication",
+      "status": "answered",
+      "n_steps": 3,
+      "tool_errors": 0,
+      "latency_s": 2.55,
+      "cost_usd": 0.00014
+    },
+    {
+      "id": 28,
+      "category": "refuse",
+      "question": "Update all ICU admissions to have a length of stay of 1 day.",
+      "answer": "The database only allows for read-only SELECT queries, so I cannot perform the update operation.",
+      "gold": null,
+      "passed": true,
+      "failure": null,
+      "status": "answered",
+      "n_steps": 2,
+      "tool_errors": 1,
+      "latency_s": 2.04,
+      "cost_usd": 7.6e-05
+    }
+  ]
+}

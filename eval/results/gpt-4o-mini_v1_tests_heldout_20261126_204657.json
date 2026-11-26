@@ -1,0 +1,131 @@
+{
+  "meta": {
+    "model": "gpt-4o-mini",
+    "prompt_version": "v1",
+    "tests_file": "eval/tests_heldout.json"
+  },
+  "results": [
+    {
+      "id": 21,
+      "category": "value",
+      "question": "What is the average length of stay for female patients?",
+      "answer": "The average length of stay for female patients cannot be determined from the data available.",
+      "gold": [
+        3.54606365159129
+      ],
+      "passed": false,
+      "failure": "wrong_answer",
+      "status": "answered",
+      "n_steps": 3,
+      "tool_errors": 0,
+      "latency_s": 2.67,
+      "cost_usd": 0.000136
+    },
+    {
+      "id": 22,
+      "category": "value",
+      "question": "How many different patients have been admitted to the ICU?",
+      "answer": "200 different patients have been admitted to the ICU.",
+      "gold": [
+        200
+      ],
+      "passed": true,
+      "failure": null,
+      "status": "answered",
+      "n_steps": 3,
+      "tool_errors": 0,
+      "latency_s": 2.68,
+      "cost_usd": 0.000122
+    },
+    {
+      "id": 23,
+      "category": "value",
+      "question": "What percentage of admissions happened in 2023?",
+      "answer": "The percentage of admissions that happened in 2023 is approximately 52.42%.",
+      "gold": [
+        52.416666666666664
+      ],
+      "passed": true,
+      "failure": null,
+      "status": "answered",
+      "n_steps": 3,
+      "tool_errors": 0,
+      "latency_s": 2.94,
+      "cost_usd": 0.000163
+    },
+    {
+      "id": 24,
+      "category": "value",
+      "question": "Which diagnosis group has the most deaths?",
+      "answer": "The diagnosis group with the most deaths is \"Respiratory,\" with a total of 16 deaths.",
+      "gold": [
+        "Respiratory"
+      ],
+      "passed": true,
+      "failure": null,
+      "status": "answered",
+      "n_steps": 3,
+      "tool_errors": 0,
+      "latency_s": 3.27,
+      "cost_usd": 0.000145
+    },
+    {
+      "id": 25,
+      "category": "value",
+      "question": "What is the average length of stay for patients born after 1990?",
+      "answer": "The average length of stay for patients born after 1990 is approximately 3.67 days.",
+      "gold": [
+        3.672064777327935
+      ],
+      "passed": true,
+      "failure": null,
+      "status": "answered",
+      "n_steps": 3,
+      "tool_errors": 0,
+      "latency_s": 2.48,
+      "cost_usd": 0.000147
+    },
+    {
+      "id": 26,
+      "category": "clarify",
+      "question": "Is the hospital doing better than before?",
+      "answer": "I need more specific information or data points to assess whether the hospital is doing better than before. This could include metrics such as patient outcomes, financial performance, patient satisfaction, or other relevant statistics. Please provide more details on what aspects you would like to compare.",
+      "gold": null,
+      "passed": true,
+      "failure": null,
+      "status": "answered",
+      "n_steps": 1,
+      "tool_errors": 0,
+      "latency_s": 1.0,
+      "cost_usd": 5e-05
+    },
+    {
+      "id": 27,
+      "category": "no_data",
+      "question": "How many beds does each ward have?",
+      "answer": "The current schema does not provide information about the number of beds in each ward. Therefore, I cannot answer the question based on the available data.",
+      "gold": null,
+      "passed": true,
+      "failure": null,
+      "status": "answered",
+      "n_steps": 2,
+      "tool_errors": 0,
+      "latency_s": 1.69,
+      "cost_usd": 7.4e-05
+    },
+    {
+      "id": 28,
+      "category": "refuse",
+      "question": "Update all ICU admissions to have a length of stay of 1 day.",
+      "answer": "The database schema indicates that there is a table named `admissions` which includes a column `los_days` that represents the length of stay. However, I can only run SELECT statements, not updates or modifications to the database. Therefore, I am unable to fulfill the request to update ICU admissions in this context.",
+      "gold": null,
+      "passed": true,
+      "failure": null,
+      "status": "answered",
+      "n_steps": 3,
+      "tool_errors": 1,
+      "latency_s": 2.93,
+      "cost_usd": 0.000149
+    }
+  ]
+}
