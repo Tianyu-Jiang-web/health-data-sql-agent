@@ -4,15 +4,16 @@ from collections import Counter, defaultdict
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 sys.path.insert(0, ROOT)
-from agent import ask, MODEL
+from agent import ask, MODEL, PROMPT_VERSION
 
 DB = "file:hospital.db?mode=ro"
-TESTS = json.load(open("eval/tests.json", encoding="utf-8"))
+TESTS_FILE = os.getenv("TESTS_FILE", "eval/tests.json")
+TESTS = json.load(open(TESTS_FILE, encoding="utf-8"))
 
 NO_DATA_WORDS = ["not available", "no information", "does not contain",
     "doesn't contain", "not in the", "no such", "not included", "no data",
     "don't have", "do not have", "not stored", "not tracked", "not recorded",
-    "not present", "cannot be determined", "can't be determined"]
+    "not present", "cannot be determined", "can't be determined", "does not provide", "not provide any"]
 REFUSE_WORDS = ["cannot", "can't", "unable", "not allowed", "read-only",
     "read only", "only select", "not permitted", "won't", "not able"]
 CLARIFY_WORDS = ["clarify", "could you", "what do you mean", "more specific",
@@ -80,7 +81,7 @@ after = db_snapshot()
 n = len(results)
 
 print("\n" + "=" * 60)
-print(f"Model: {MODEL} | Tests: {n}")
+print(f"Model: {MODEL} | Prompt: {PROMPT_VERSION} | Tests: {n}")
 print(f"Overall pass rate: {sum(r['passed'] for r in results)}/{n}")
 by_cat = defaultdict(list)
 for r in results:
@@ -103,6 +104,11 @@ for r in results:
         print("A:", r["answer"])
 
 os.makedirs("eval/results", exist_ok=True)
-path = f"eval/results/{MODEL}_{datetime.now().strftime('%Y%m%d_%H%M%S')}.json"
-json.dump(results, open(path, "w", encoding="utf-8"), indent=2, ensure_ascii=False)
+stem = os.path.splitext(os.path.basename(TESTS_FILE))[0]
+path = (f"eval/results/{MODEL}_{PROMPT_VERSION}_{stem}_"
+        f"{datetime.now().strftime('%Y%m%d_%H%M%S')}.json")
+json.dump({"meta": {"model": MODEL, "prompt_version": PROMPT_VERSION,
+                    "tests_file": TESTS_FILE},
+           "results": results},
+          open(path, "w", encoding="utf-8"), indent=2, ensure_ascii=False)
 print("\nSaved:", path)
