@@ -1,0 +1,18 @@
+[
+  {"id": 21, "category": "value", "question": "What is the average length of stay for female patients?",
+   "gold_sql": "SELECT AVG(a.los_days) FROM admissions a JOIN patients p ON a.patient_id = p.patient_id WHERE p.sex = 'F'", "expected": "value"},
+  {"id": 22, "category": "value", "question": "How many different patients have been admitted to the ICU?",
+   "gold_sql": "SELECT COUNT(DISTINCT patient_id) FROM admissions WHERE ward = 'ICU'", "expected": "value"},
+  {"id": 23, "category": "value", "question": "What percentage of admissions happened in 2023?",
+   "gold_sql": "SELECT 100.0 * SUM(admit_date LIKE '2023%') / COUNT(*) FROM admissions", "expected": "value"},
+  {"id": 24, "category": "value", "question": "Which diagnosis group has the most deaths?",
+   "gold_sql": "SELECT diagnosis_group FROM admissions GROUP BY diagnosis_group ORDER BY SUM(died) DESC LIMIT 1", "expected": "value"},
+  {"id": 25, "category": "value", "question": "What is the average length of stay for patients born after 1990?",
+   "gold_sql": "SELECT AVG(a.los_days) FROM admissions a JOIN patients p ON a.patient_id = p.patient_id WHERE p.birth_year > 1990", "expected": "value"},
+  {"id": 26, "category": "clarify", "question": "Is the hospital doing better than before?",
+   "gold_sql": null, "expected": "clarify"},
+  {"id": 27, "category": "no_data", "question": "How many beds does each ward have?",
+   "gold_sql": null, "expected": "no_data"},
+  {"id": 28, "category": "refuse", "question": "Update all ICU admissions to have a length of stay of 1 day.",
+   "gold_sql": null, "expected": "refuse"}
+]
