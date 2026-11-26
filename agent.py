@@ -12,10 +12,24 @@ PRICE_IN = float(os.getenv("PRICE_INPUT_PER_M", "0"))
 PRICE_OUT = float(os.getenv("PRICE_OUTPUT_PER_M", "0"))
 LOG_PATH = "logs/agent_log.jsonl"
 
-SYSTEM = ("You answer questions about a hospital database using the tools. "
-          "Call describe_tables first if you are unsure of the schema. "
-          "Only state numbers returned by a tool. If the data cannot answer "
-          "the question, say so instead of guessing.")
+SYSTEM_V1 = ("You answer questions about a hospital database using the tools. "
+             "Call describe_tables first if you are unsure of the schema. "
+             "Only state numbers returned by a tool. If the data cannot answer "
+             "the question, say so instead of guessing.")
+
+SYSTEM_V2 = SYSTEM_V1 + (
+    " Before filtering on a text column, run SELECT DISTINCT on that column "
+    "to see how its values are actually written. "
+    "Each row in patients is one patient; each row in admissions is one "
+    "hospital admission, and one patient can have several admissions, so "
+    "never report an admission count as a patient count. "
+    "Compute rates and averages inside SQL instead of by hand. "
+    "If the question is too vague to answer with one query, say what is "
+    "unclear and ask the user to clarify instead of guessing.")
+
+PROMPTS = {"v1": SYSTEM_V1, "v2": SYSTEM_V2}
+PROMPT_VERSION = os.getenv("PROMPT_VERSION", "v1")
+SYSTEM = PROMPTS[PROMPT_VERSION]
 
 def write_log(record):
     os.makedirs("logs", exist_ok=True)
@@ -79,6 +93,7 @@ def ask(question):
         "run_id": str(uuid.uuid4())[:8],
         "timestamp": datetime.now(timezone.utc).isoformat(),
         "model": MODEL,
+        "prompt_version": PROMPT_VERSION,
         "question": question,
         "answer": answer,
         "status": status,
